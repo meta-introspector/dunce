@@ -486,12 +486,7 @@ let remote_add t ~branch ~handle ~source =
 ;;
 
 let add_repo ({ dir } as t) ~source ~branch =
-  let decoded_remote =
-    match branch with
-    | None -> source
-    | Some branch -> sprintf "%s %s" source branch
-  in
-  let handle = decoded_remote |> Dune_digest.string |> Dune_digest.to_string in
+  let handle = Dune_digest.string source |> Dune_digest.to_string in
   let lock = lock_path t in
   with_flock lock ~f:(fun () ->
     let* exists = remote_exists dir ~name:handle in
